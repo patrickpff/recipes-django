@@ -1,6 +1,7 @@
 from django.urls import resolve, reverse
 from recipes import views
 from .test_recipe_base import RecipeTestBase
+from unittest.mock import patch
 
 class RecipeHomeViewTest(RecipeTestBase):
     def test_recipe_home_views_function_is_correct(self):
@@ -46,3 +47,44 @@ class RecipeHomeViewTest(RecipeTestBase):
         self.assertIn(str(recipe.preparation_time) + " " + recipe.preparation_time_unit, content)
         self.assertIn(str(recipe.servings) + " " + recipe.servings_unit, content)
         self.assertEqual(len(response_context_recipes), 1)
+
+    @patch('recipes.views.PER_PAGE', new=3)
+    def test_recipe_home_template_is_paginated(self):
+        for i in range(9):
+            kwargs = {
+                'slug': f'r{i}',
+                'author_data': {
+                    'username': f'u{i}'
+                }
+            }
+
+            self.make_recipe(**kwargs)
+        
+        response = self.client.get(reverse('recipes:home'))
+        recipes = response.context['recipes']
+        paginator = recipes.paginator
+        
+        self.assertEqual(paginator.num_pages, 3)
+        self.assertEqual(len(paginator.get_page(1)), 3)
+        self.assertEqual(len(paginator.get_page(2)), 3)
+        self.assertEqual(len(paginator.get_page(2)), 3)
+    
+    def test_recipe_home_template_is_paginated_page_incomplete(self):
+        for i in range(9):
+            kwargs = {
+                'slug': f'r{i}',
+                'author_data': {
+                    'username': f'u{i}'
+                }
+            }
+
+            self.make_recipe(**kwargs)
+        
+        with patch('recipes.views.PER_PAGE', new=6):
+            response = self.client.get(reverse('recipes:home'))
+            recipes = response.context['recipes']
+            paginator = recipes.paginator
+            
+            self.assertEqual(paginator.num_pages, 2)
+            self.assertEqual(len(paginator.get_page(1)), 6)
+            self.assertEqual(len(paginator.get_page(2)), 3)
