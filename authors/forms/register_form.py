@@ -1,7 +1,9 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+
 from utils.django_forms import strong_password
+
 
 class RegisterForm(forms.ModelForm):
     password = forms.CharField(
@@ -23,9 +25,9 @@ class RegisterForm(forms.ModelForm):
     username = forms.CharField(
         label='Username',
         widget=forms.TextInput(attrs={'placeholder': 'Choose a username'}),
-        help_text= ('Required. Must be between 4 and 150 characters long. '
-            'Letters, digits and @/./+/-/_ only.'),
-        error_messages = {
+        help_text=('Required. Must be between 4 and 150 characters long. '
+                   'Letters, digits and @/./+/-/_ only.'),
+        error_messages={
             'required': 'This field is required!',
             'min_length': 'Username has to be at least 4 characters long.',
             'max_length': 'Username must have less than 150 characters.',
@@ -33,7 +35,6 @@ class RegisterForm(forms.ModelForm):
         min_length=4, max_length=150
     )
 
-        
     first_name = forms.CharField(
         error_messages={'required': 'Write your first name'},
         label='First Name',
@@ -64,6 +65,7 @@ class RegisterForm(forms.ModelForm):
             'required': 'Please, repeat your password',
         },
     )
+
     class Meta:
         model = User
         fields = [
@@ -104,7 +106,7 @@ class RegisterForm(forms.ModelForm):
             raise ValidationError(
                 'User e-mail is already in use', code='invalid'
             )
-        
+
         return email
 
     def clean(self):
@@ -116,5 +118,6 @@ class RegisterForm(forms.ModelForm):
         if password != password_confirmation:
             raise ValidationError({
                 'password': 'Password and password confirmation must be equal',
-                'password_confirmation': 'Password and password confirmation must be equal'
+                'password_confirmation': ('Password and password '
+                                          'confirmation must be equal')
             })
