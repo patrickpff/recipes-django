@@ -1,25 +1,27 @@
-from .test_recipe_base import RecipeTestBase, Recipe
 from django.core.exceptions import ValidationError
 from parameterized import parameterized
+
+from .test_recipe_base import Recipe, RecipeTestBase
+
 
 class RecipeModelTest(RecipeTestBase):
     def setUp(self):
         self.recipe = self.make_recipe()
 
         return super().setUp()
-    
+
     def make_recipe_no_defaults(self):
         recipe = Recipe(
             category=self.make_category(name="Vegan"),
             author=self.make_author(username="janedoe"),
-            title = 'Recipe Title',
-            description = 'Recipe Description',
-            slug = 'recipe-slug-for-no-defaults',
-            preparation_time = 10,
-            preparation_time_unit = 'Minutes',
-            servings = '5',
-            servings_unit = 'Servings',
-            preparation_step = 'Recipe Preparation Steps'
+            title='Recipe Title',
+            description='Recipe Description',
+            slug='recipe-slug-for-no-defaults',
+            preparation_time=10,
+            preparation_time_unit='Minutes',
+            servings='5',
+            servings_unit='Servings',
+            preparation_step='Recipe Preparation Steps'
         )
         recipe.full_clean()
         recipe.save()
@@ -52,7 +54,7 @@ class RecipeModelTest(RecipeTestBase):
             recipe.is_published,
             msg='Recipe preparation_steps_is_html is not False by default.'
         )
-    
+
     def test_recipe_string_representation(self):
         self.recipe.title = "Testing representation"
         self.recipe.full_clean()

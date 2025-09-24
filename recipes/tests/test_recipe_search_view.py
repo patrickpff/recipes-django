@@ -1,6 +1,9 @@
 from django.urls import resolve, reverse
+
 from recipes import views
+
 from .test_recipe_base import RecipeTestBase
+
 
 class RecipeViewsTest(RecipeTestBase):
     def test_recipe_search_views_function_is_correct(self):
@@ -9,7 +12,9 @@ class RecipeViewsTest(RecipeTestBase):
         self.assertIs(view.func, views.search)
 
     def test_recipe_search_loads_correct_template(self):
-        response = self.client.get(reverse('recipes:search') + '?q=lorem+ipsum')
+        response = self.client.get(
+            reverse('recipes:search') + '?q=lorem+ipsum'
+        )
 
         self.assertTemplateUsed(response, 'recipes/pages/search.html')
 
@@ -25,7 +30,7 @@ class RecipeViewsTest(RecipeTestBase):
             f'Search for &quot;{term}&quot;',
             response.content.decode('utf-8')
         )
-    
+
     def test_recipe_search_can_find_recipe_by_title(self):
         title1 = "This is recipe one"
         title2 = "This is recipe two"
@@ -52,6 +57,6 @@ class RecipeViewsTest(RecipeTestBase):
 
         self.assertIn(recipe2, response2.context['recipes'])
         self.assertNotIn(recipe1, response2.context['recipes'])
-        
+
         self.assertIn(recipe1, response_both.context['recipes'])
         self.assertIn(recipe2, response_both.context['recipes'])

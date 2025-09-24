@@ -1,18 +1,14 @@
 from django.test import TestCase
+
 from recipes.models import Category, Recipe, User
 
-class RecipeTestBase(TestCase):
-    def setUp(self):
-        return super().setUp()
-    
-    def tearDown(self):
-        return super().tearDown()
 
+class RecipeMixin:
     def make_category(self, name='Category'):
         return Category.objects.create(name=name)
-    
+
     def make_author(
-        self, 
+        self,
         first_name='Jon',
         last_name='Doe',
         username='johndoe',
@@ -26,21 +22,21 @@ class RecipeTestBase(TestCase):
             password=password,
             email=email,
         )
-    
+
     def make_recipe(
         self,
         category_data=None,
         author_data=None,
-        title = 'Recipe Title',
-        description = 'Recipe Description',
-        slug = 'recipe-slug',
-        preparation_time = 10,
-        preparation_time_unit = 'Minutes',
-        servings = '5',
-        servings_unit = 'Servings',
-        preparation_step = 'Recipe Preparation Steps',
-        preparation_step_is_html = False,
-        is_published = True,
+        title='Recipe Title',
+        description='Recipe Description',
+        slug='recipe-slug',
+        preparation_time=10,
+        preparation_time_unit='Minutes',
+        servings='5',
+        servings_unit='Servings',
+        preparation_step='Recipe Preparation Steps',
+        preparation_step_is_html=False,
+        is_published=True,
     ):
         if category_data is None:
             category_data = {}
@@ -51,14 +47,22 @@ class RecipeTestBase(TestCase):
         return Recipe.objects.create(
             category=self.make_category(**category_data),
             author=self.make_author(**author_data),
-            title = title,
-            description = description,
-            slug = slug,
-            preparation_time = preparation_time,
-            preparation_time_unit = preparation_time_unit,
-            servings = servings,
-            servings_unit = servings_unit,
-            preparation_step = preparation_step,
-            preparation_step_is_html = preparation_step_is_html,
-            is_published = is_published,
+            title=title,
+            description=description,
+            slug=slug,
+            preparation_time=preparation_time,
+            preparation_time_unit=preparation_time_unit,
+            servings=servings,
+            servings_unit=servings_unit,
+            preparation_step=preparation_step,
+            preparation_step_is_html=preparation_step_is_html,
+            is_published=is_published,
         )
+
+
+class RecipeTestBase(TestCase, RecipeMixin):
+    def setUp(self):
+        return super().setUp()
+
+    def tearDown(self):
+        return super().tearDown()
