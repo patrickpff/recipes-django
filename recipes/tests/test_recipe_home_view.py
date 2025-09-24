@@ -60,15 +60,7 @@ class RecipeHomeViewTest(RecipeTestBase):
 
     @patch('recipes.views.PER_PAGE', new=3)
     def test_recipe_home_template_is_paginated(self):
-        for i in range(9):
-            kwargs = {
-                'slug': f'r{i}',
-                'author_data': {
-                    'username': f'u{i}'
-                }
-            }
-
-            self.make_recipe(**kwargs)
+        self.make_recipe_in_batch(qty=9)
 
         response = self.client.get(reverse('recipes:home'))
         recipes = response.context['recipes']
@@ -80,15 +72,7 @@ class RecipeHomeViewTest(RecipeTestBase):
         self.assertEqual(len(paginator.get_page(2)), 3)
 
     def test_recipe_home_template_is_paginated_page_incomplete(self):
-        for i in range(9):
-            kwargs = {
-                'slug': f'r{i}',
-                'author_data': {
-                    'username': f'u{i}'
-                }
-            }
-
-            self.make_recipe(**kwargs)
+        self.make_recipe_in_batch(qty=9)
 
         with patch('recipes.views.PER_PAGE', new=6):
             response = self.client.get(reverse('recipes:home'))
@@ -100,15 +84,7 @@ class RecipeHomeViewTest(RecipeTestBase):
             self.assertEqual(len(paginator.get_page(2)), 3)
 
     def test_invalid_page_query_uses_page_one(self):
-        for i in range(9):
-            kwargs = {
-                'slug': f'r{i}',
-                'author_data': {
-                    'username': f'u{i}'
-                }
-            }
-
-            self.make_recipe(**kwargs)
+        self.make_recipe_in_batch(qty=9)
 
         with patch('recipes.views.PER_PAGE', new=6):
             response = self.client.get(reverse('recipes:home') + '?page=1A')
