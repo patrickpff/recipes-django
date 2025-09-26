@@ -2,10 +2,13 @@ from random import randint
 
 from faker import Faker
 
+
 def rand_ratio():
-    return randint(840,900), randint(473,573)
+    return randint(840, 900), randint(473, 573)
+
 
 fake = Faker('pt_BR')
+
 
 def make_recipe():
     return {
@@ -29,6 +32,7 @@ def make_recipe():
             'url': 'https://static.photos/food/640x360/%s' % randint(1, 255),
         }
     }
+
 
 if __name__ == '__main__':
     from pprint import pprint
