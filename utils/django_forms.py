@@ -15,3 +15,8 @@ def strong_password(password):
             ),
             code='Invalid'
         )
+
+
+def add_attr(field, attr_name, attr_new_value):
+    existing = field.widget.attrs.get(attr_name, '')
+    field.widget.attrs[attr_name] = f'{existing} {attr_new_value}'.strip()
