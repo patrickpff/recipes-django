@@ -1,12 +1,18 @@
+from collections import defaultdict
+
 from django import forms
+from django.core.exceptions import ValidationError
 
 from recipes.models import Recipe
 from utils.django_forms import add_attr
+from utils.strings import is_positive_number
 
 
 class AuthorRecipeForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+        self._validation_errors = defaultdict(list)
 
         add_attr(self.fields.get('preparation_step'), 'class', 'span-2')
         add_attr(self.fields.get('cover'), 'class', 'span-2')
@@ -36,3 +42,52 @@ class AuthorRecipeForm(forms.ModelForm):
                 )
             )
         }
+
+    def clean(self, *args, **kwargs):
+        super_clean = super().clean(*args, **kwargs)
+        cleaned_data = self.cleaned_data
+
+        title = cleaned_data.get('title')
+        description = cleaned_data.get('description')
+
+        if title == description:
+            self._validation_errors['title'].append(
+                "Title cannot be equal to description"
+            )
+            self._validation_errors['description'].append(
+                "Description cannot be equal to the title"
+            )
+
+        if self._validation_errors:
+            raise ValidationError(self._validation_errors)
+
+        return super_clean
+
+    def clean_title(self):
+        title = self.cleaned_data.get('title')
+
+        if len(title) < 5:
+            self._validation_errors['title'].append(
+                "Title must be at least 5 characters long.")
+
+        return title
+
+    def clean_preparation_time(self):
+        field_name = 'preparation_time'
+        field_value = self.cleaned_data.get(field_name)
+
+        if not is_positive_number(field_value):
+            self._validation_errors[field_name].append(
+                "Must be a positive number.")
+
+        return field_value
+
+    def clean_servings(self):
+        field_name = 'servings'
+        field_value = self.cleaned_data.get(field_name)
+
+        if not is_positive_number(field_value):
+            self._validation_errors[field_name].append(
+                "Must be a positive number.")
+
+        return field_value
