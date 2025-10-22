@@ -51,7 +51,7 @@ class Recipe(models.Model):
         blank=True,
         default=None
     )
-    tags = models.ManyToManyField(Tag)
+    tags = models.ManyToManyField(Tag, blank=True, default='')
 
     def __str__(self):
         return self.title
