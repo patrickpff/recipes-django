@@ -1,4 +1,5 @@
 import pytest
+from django.utils import translation
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 
@@ -69,14 +70,15 @@ class AuthorsRegisterTest(AuthorsBaseTest):
 
     def test_empty_email_error_message(self):
         def callback(form):
-            email_field = form.find_element(by=By.NAME, value='email')
-            email_field.clear()
-            email_field.send_keys("mail@invalid")
-            email_field.send_keys(Keys.ENTER)
+            with translation.override('en'):
+                email_field = form.find_element(by=By.NAME, value='email')
+                email_field.clear()
+                email_field.send_keys("mail@invalid")
+                email_field.send_keys(Keys.ENTER)
 
-            form = self.get_form()
+                form = self.get_form()
 
-            self.assertIn('Enter a valid email address.', form.text)
+                self.assertIn('The e-mail must be valid.', form.text)
         self.form_field_test_with_callback(callback)
 
     def test_empty_password_error_message(self):
