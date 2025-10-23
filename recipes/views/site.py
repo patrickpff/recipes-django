@@ -7,10 +7,9 @@ from django.utils import translation
 from django.utils.translation import gettext as _
 from django.views.generic import DetailView, ListView
 
+from recipes.models import Recipe
 from tag.models import Tag
 from utils.pagination import make_pagination
-
-from .models import Recipe
 
 PER_PAGE = os.environ.get('PER_PAGE', 9)
 

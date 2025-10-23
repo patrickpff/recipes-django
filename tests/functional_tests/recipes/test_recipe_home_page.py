@@ -22,7 +22,7 @@ class RecipeHomePageFunctionalTest(RecipeBaseFunctionalTest):
         body = self.browser.find_element(by=By.TAG_NAME, value='body')
         self.assertNotIn('There are no recipes published yet.', body.text)
 
-    @patch('recipes.views.PER_PAGE', new=3)
+    @patch('recipes.views.site.PER_PAGE', new=3)
     def test_recipe_search_input_can_find_correct_recipes(self): # noqa
         recipes = self.make_recipe_in_batch()
 
@@ -56,7 +56,7 @@ class RecipeHomePageFunctionalTest(RecipeBaseFunctionalTest):
             ).text,
         )
 
-    @patch('recipes.views.PER_PAGE', new=2)
+    @patch('recipes.views.site.PER_PAGE', new=2)
     def test_recipe_home_page_pagination(self): # noqa
         self.make_recipe_in_batch()
 

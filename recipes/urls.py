@@ -32,4 +32,14 @@ urlpatterns = [
         views.RecipeDetailAPI.as_view(),
         name="recipes_api_v1_detail"
     ),
+    path(
+        'recipes/api/v2/',
+        views.recipe_api_list,
+        name='recipes_api_v2'
+    ),
+    path(
+        'recipes/api/v2/<int:pk>/',
+        views.recipe_api_detail,
+        name='recipes_api_v2_detail'
+    )
 ]
