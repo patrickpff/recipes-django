@@ -10,6 +10,7 @@ INSTALLED_APPS = [
     # rest framework
     'rest_framework_simplejwt',
     'rest_framework',
+    'django_extensions',
     # new apps
     'recipes',
     'authors',

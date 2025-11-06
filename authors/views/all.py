@@ -36,7 +36,7 @@ def register_create(request):
 
         messages.success(
             request,
-            'Your uer was created successfully. Please, log in.'
+            'Your user was created successfully. Please, log in.'
         )
         del (request.session['register_form_data'])
         return redirect(reverse('authors:login'))

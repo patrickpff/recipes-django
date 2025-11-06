@@ -180,6 +180,6 @@ class AuthorsRegisterTest(AuthorsBaseTest):
         form.submit()
 
         self.assertIn(
-            'Your uer was created successfully. Please, log in.',
+            'Your user was created successfully.',
             self.browser.find_element(by=By.TAG_NAME, value='body').text
         )
